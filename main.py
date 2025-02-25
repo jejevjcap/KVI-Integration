@@ -1,11 +1,14 @@
 import os
-from flask import Flask
+from flask import Flask,jsonify
 from flask_swagger_ui import get_swaggerui_blueprint
 from flask_migrate import Migrate  # Import Flask-Migrate
 from dotenv import load_dotenv
 from models.user import db
 from controller import authentication
 from flask_jwt_extended import JWTManager
+from flask_jwt_extended import jwt_required, get_jwt_identity
+
+
 
 # Load environment variables from .env file
 load_dotenv()
@@ -45,6 +48,12 @@ def register():
 @app.route("/auth", methods=["POST"])
 def auth():
     return authentication.login()
+@app.route("/protected", methods=["GET"])
+@jwt_required()
+def protected():
+    current_user = get_jwt_identity()
+    return jsonify(logged_in_as=current_user), 200
+
 
 
 if __name__ == "__main__":

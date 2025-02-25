@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, request
 from models.user import db, User
 from flask_jwt_extended import JWTManager, create_access_token
-from datetime import datetime
+from datetime import datetime, timedelta
 import uuid
 
 def signup():
@@ -61,7 +61,7 @@ def login():
     
     if user and user.check_password(password):
         # Create JWT access token
-        access_token = create_access_token(identity=username)
+        access_token = create_access_token(identity=username, expires_delta=timedelta(minutes=60))
         return jsonify({
             "access_token": access_token,
             "token_type": "bearer",
