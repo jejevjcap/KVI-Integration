@@ -11,3 +11,4 @@ docs/_build/
 *.bat
 .env
 mynotes.txt
+seed_*.py
