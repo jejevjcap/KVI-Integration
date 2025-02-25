@@ -1,57 +1,193 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "Access API",
-    "version": "1.0.0"
+    "title": "KVI API",
+    "version": "1.0.0",
+    "description": "API documentation for user registration and authentication"
   },
   "paths": {
-    "/": {
-      "get": {
-        "description": "Returns message showing app is up",
-        "produces": ["application/json"],
+    "/register": {
+      "post": {
+        "summary": "Register a new user",
+        "description": "Registers a new user with username and password",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "user",
+            "description": "User to register",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "username": {
+                  "type": "string",
+                  "example": "testuser"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "securepassword"
+                }
+              },
+              "required": ["username", "password"]
+            }
+          }
+        ],
         "responses": {
-          "200": {
-            "description": "Successful operation"
+          "201": {
+            "description": "User registered successfully"
+          },
+          "400": {
+            "description": "Username already exists or missing fields"
+          },
+          "500": {
+            "description": "Internal server error"
           }
         }
       }
     },
-    "/access": {
+    "/auth": {
       "post": {
-        "description": "Grants access to an user",
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
+        "summary": "Authenticate a user",
+        "description": "Authenticates a user using username and password",
         "parameters": [
           {
-            "name": "access data",
             "in": "body",
-            "description": "JSON data for the api",
+            "name": "auth",
+            "description": "Authentication data",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/AccessData"
+              "type": "object",
+              "properties": {
+                "username": {
+                  "type": "string",
+                  "example": "testuser"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "securepassword"
+                }
+              },
+              "required": ["username", "password"]
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "User granted access"
+            "description": "Authentication successful",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "access_token": {
+                  "type": "string",
+                  "example": "your_generated_access_token"
+                },
+                "token_type": {
+                  "type": "string",
+                  "example": "bearer"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Authentication successful"
+                }
+              }
+            }
           },
-          "400": {
-            "description": "Invalid request data"
+          "ERR991": {
+            "description": "Invalid username or password",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "string",
+                  "example": "ERR991"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Invalid username or password"
+                },
+                "status": {
+                  "type": "integer",
+                  "example": 401
+                },
+                "path": {
+                  "type": "string",
+                  "example": "/auth"
+                },
+                "timestamp": {
+                  "type": "string",
+                  "example": "2025-02-25T12:34:56+07:00"
+                },
+                "uuid": {
+                  "type": "string",
+                  "example": "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "ERR998": {
+            "description": "Missing fields in request body or password not provided",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "string",
+                  "example": "ERR998"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Password must not be nulled"
+                },
+                "status": {
+                  "type": "integer",
+                  "example": 400
+                },
+                "path": {
+                  "type": "string",
+                  "example": "/auth"
+                },
+                "timestamp": {
+                  "type": "string",
+                  "example": "2025-02-25T12:34:56+07:00"
+                },
+                "uuid": {
+                  "type": "string",
+                  "example": "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "ERR995": {
+            "description": "Required Request Body is Missing or Empty",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "string",
+                  "example": "ERR995"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Required Request Body is Missing or Empty"
+                },
+                "status": {
+                  "type": "integer",
+                  "example": 400
+                },
+                "path": {
+                  "type": "string",
+                  "example": "/auth"
+                },
+                "timestamp": {
+                  "type": "string",
+                  "example": "2025-02-25T12:34:56+07:00"
+                },
+                "uuid": {
+                  "type": "string",
+                  "example": "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
           }
-        }
-      }
-    }
-  },
-  "definitions": {
-    "AccessData": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string"
-        },
-        "server": {
-          "type": "string"
         }
       }
     }

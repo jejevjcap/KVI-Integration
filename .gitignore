@@ -9,3 +9,5 @@ htmlcov/
 .tox/
 docs/_build/
 *.bat
+.env
+mynotes.txt
