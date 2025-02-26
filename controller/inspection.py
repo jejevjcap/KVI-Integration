@@ -10,16 +10,25 @@ def get_inspection_by_regno():
         # The @jwt_required decorator will automatically check for the token in the request
         # If the token is missing or invalid, it will raise an error and return 401 Unauthorized
         current_user = get_jwt_identity()
+        if not current_user:
+            return jsonify({
+            "code": "ERR992",
+            "message": "Forbidden Access",
+            "status": 422,
+            "path": request.path,
+            "timestamp": datetime.now().strftime("%Y-%m-%dT%H:%M:%S+07:00"),
+            "uuid": str(uuid.uuid4())
+        }), 422
     except Exception as e:
         # Handle the error and return custom error response if token is invalid
         return jsonify({
             "code": "ERR992",
             "message": "Forbidden Access",
-            "status": 401,
+            "status": 422,
             "path": request.path,
             "timestamp": datetime.now().strftime("%Y-%m-%dT%H:%M:%S+07:00"),
             "uuid": str(uuid.uuid4())
-        }), 401
+        }), 422
 
     # Get the regNo from the URL parameter
     reg_no = request.view_args.get('regNo')
@@ -59,6 +68,15 @@ def get_image_inspection_by_regno():
     # Ensure the user is authorized with a valid JWT token
     try:
         current_user = get_jwt_identity()
+        if not current_user:
+            return jsonify({
+            "code": "ERR992",
+            "message": "Forbidden Access",
+            "status": 422,
+            "path": request.path,
+            "timestamp": datetime.now().strftime("%Y-%m-%dT%H:%M:%S+07:00"),
+            "uuid": str(uuid.uuid4())
+        }), 422
     except Exception as e:
         return jsonify({
             "code": "ERR992",
@@ -67,7 +85,7 @@ def get_image_inspection_by_regno():
             "path": request.path,
             "timestamp": datetime.now().strftime("%Y-%m-%dT%H:%M:%S+07:00"),
             "uuid": str(uuid.uuid4())
-        }), 401
+        }), 422
 
     # Get the regNo from the URL parameter
     reg_no = request.view_args.get('regNo')
